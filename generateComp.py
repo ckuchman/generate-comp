@@ -38,6 +38,20 @@ class Triangle(Shape):
         ImageDraw.Draw(img).polygon([self.cord1, self.cord2, self.cord3], self.color)
 
 
+class PerspectiveCube(Shape):
+    def __init__(self, color, origin, width, height):
+        super().__init__(color)
+        self.origin = origin
+        self.width = width
+        self.height = height
+
+    def draw(self, img, vanPnt):
+        widthPnt = (self.origin[0] + self.width, self.origin[1])
+        heightPnt = (self.origin[0], self.origin[1] + self.height)
+        oppPnt = (self.origin[0] + self.width, self.origin[1] + self.height)
+
+        draw.polygon([self.origin, heightPnt, oppPnt, widthPnt], self.color)
+
 #----------Functions----------
 def genColor():
     return (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
@@ -113,13 +127,6 @@ def genOnePointPerspective(draw, height):
     return (xCord, height)
 
 
-def genCubePerspective(draw, vanPnt, originPnt, width, height):
-    widthPnt = (originPnt[0] + width, originPnt[1])
-    heightPnt = (originPnt[0], originPnt[1] + height)
-    oppPnt = (originPnt[0] + width, originPnt[1] + height)
-
-    draw.polygon([originPnt, heightPnt, oppPnt, widthPnt], genColor())
-
 #----------Main Functions----------
 def randomImage():
     #gens the base image
@@ -155,7 +162,8 @@ def perspectiveImage():
     genHorizon(draw, height)
     vanPnt = genOnePointPerspective(draw, height)
 
-    genCubePerspective(draw, vanPnt, (100, 100), 100, 200)
+    cube = PerspectiveCube(genColor(), (1000, 1000), 100, 200)
+    cube.draw(img, vanPnt)
 
     shapeList = []
 
