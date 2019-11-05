@@ -50,7 +50,30 @@ class PerspectiveCube(Shape):
         heightPnt = (self.origin[0], self.origin[1] + self.height)
         oppPnt = (self.origin[0] + self.width, self.origin[1] + self.height)
 
-        draw.polygon([self.origin, heightPnt, oppPnt, widthPnt], self.color)
+        ImageDraw.Draw(img).polygon([self.origin, heightPnt, oppPnt, widthPnt], self.color)
+
+        if vanPnt[0] < self.origin[0]:
+            sideBtmPnt = vanPnt
+            sideTopPnt = vanPnt
+            
+            ImageDraw.Draw(img).polygon([self.origin, heightPnt, sideTopPnt, sideBtmPnt], genColor())
+        elif vanPnt[0] > widthPnt[0]:
+            sideBtmPnt = vanPnt
+            sideTopPnt = vanPnt
+            
+            ImageDraw.Draw(img).polygon([widthPnt, oppPnt, sideTopPnt, sideBtmPnt], genColor())
+
+        if vanPnt[1] < self.origin[1]:
+            vrtLftPnt = vanPnt
+            vrtRgtPnt = vanPnt
+            
+            ImageDraw.Draw(img).polygon([self.origin, widthPnt, vrtLftPnt, vrtRgtPnt], genColor())
+        elif vanPnt[1] > heightPnt[1]:
+            vrtLftPnt = vanPnt
+            vrtRgtPnt = vanPnt
+            
+            ImageDraw.Draw(img).polygon([heightPnt, oppPnt, vrtRgtPnt, vrtLftPnt], genColor())
+
 
 #----------Functions----------
 def genColor():
@@ -162,8 +185,11 @@ def perspectiveImage():
     genHorizon(draw, height)
     vanPnt = genOnePointPerspective(draw, height)
 
-    cube = PerspectiveCube(genColor(), (1000, 1000), 100, 200)
+    cube = PerspectiveCube(genColor(), (random.randint(0, math.floor(MAX_WIDTH/2)), random.randint(0, math.floor(MAX_HEIGHT/2))), random.randint(100, 1000), random.randint(100, 1000))
     cube.draw(img, vanPnt)
+
+    cube2 = PerspectiveCube(genColor(), (random.randint(0, math.floor(MAX_WIDTH/2)), random.randint(0, math.floor(MAX_HEIGHT/2))), random.randint(100, 1000), random.randint(100, 1000))
+    cube2.draw(img, vanPnt)
 
     shapeList = []
 
@@ -174,3 +200,4 @@ def perspectiveImage():
 
 #----------Main----------
 perspectiveImage()
+
